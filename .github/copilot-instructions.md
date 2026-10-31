@@ -16,10 +16,5 @@ Project context Copilot should apply to every session in this repository.
 
 ## Persistence and hydration rules
 
-<!-- TODO (Step 2): add the two project rules this app depends on.
-     Replace this TODO with concrete guidance covering:
-       1. how bookmarks are persisted in the browser, and
-       2. where that browser-only code is allowed to run so the
-          static build never touches browser APIs. -->
-
-_TODO: complete the persistence and hydration rules above._
+- **Persistence**: bookmarks are stored in the browser with `localStorage` under a single key, as a JSON array of `{ url, slug }` objects. There is no backend, so never send bookmark data to a server. Wrap reads in `try`/`catch` and fall back to an empty list when stored data is missing or invalid.
+- **Hydration**: browser-only code (`localStorage`, `document`, `window`, `navigator.clipboard`) must run only on the client, never in component frontmatter or at build time. Keep it in the component's client `<script>` block. If a bookmarks UI is ever built as a framework component, mount it with the `client:load` directive so it hydrates in the browser and the static build never touches browser APIs.
